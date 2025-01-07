@@ -1,0 +1,10 @@
+['tsp_cba_flashbang_volume', 'SLIDER', ['Volume', 'Change volume of all flashbangs.'], 'TSP Breach - Flashbang', [0, 5, 5], true] call CBA_fnc_addSetting;
+['tsp_cba_flashbang_distance', 'SLIDER', ['Distance', 'Change distance of all flashbangs.'], 'TSP Breach - Flashbang', [0, 50, 10], true] call CBA_fnc_addSetting;
+['tsp_cba_flashbang_intensity', 'SLIDER', ['Intensity', 'Change intensity of all flashbangs.'], 'TSP Breach - Flashbang', [0, 10, 1], true] call CBA_fnc_addSetting;
+['tsp_cba_flashbang_friends', 'SLIDER', ['Decreased Effects', 'Decrease flashbang effects for friendly units.'], 'TSP Breach - Flashbang', [0, 1, 0.1], true] call CBA_fnc_addSetting;
+['tsp_cba_flashbang_surrender', 'SLIDER', ['Surrender Chance', 'Chance unit will surrender on flashbang.'],	'TSP Breach - Flashbang', [0, 1, 0.1], true] call CBA_fnc_addSetting;
+['tsp_cba_flashbang_spray', 'SLIDER', ['Spray Chance', 'Chance unit will fire weapon while flashed.'], 'TSP Breach - Flashbang', [0, 1, 0.4], true] call CBA_fnc_addSetting;
+['tsp_cba_flashbang_brightness', 'SLIDER', ['Brightness', 'Change brightness of all flashbangs.'], 'TSP Breach - Flashbang', [0, 1, 1], true] call CBA_fnc_addSetting;
+["tsp_cba_flashbang_smoke", "CHECKBOX", ["Enable Smoke", "Enable/disable flashbang smoke."], 'TSP Breach - Flashbang', true, true] call CBA_fnc_addSetting;
+["tsp_cba_flashbang_fire", "CHECKBOX", ["Enable Flash", "Enable/disable flashbang muzzle flash."], 'TSP Breach - Flashbang', true, true] call CBA_fnc_addSetting;
+["tsp_cba_flashbang_sparks", "CHECKBOX", ["Enable Sparks", "Enable/disable flashbang sparks."], 'TSP Breach - Flashbang', true, true] call CBA_fnc_addSetting;

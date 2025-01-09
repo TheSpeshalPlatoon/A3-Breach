@@ -21,7 +21,7 @@
 	"CUP_12Gauge_Pellets_Submunition_No0_Buck","CUP_12Gauge_Pellets_Submunition_No00_Buck",
 	"ACE_12Gauge_Pellets_Submunition_No0_Buck","HLC_12G_Buck"
 ]', true, {tsp_cba_breach_ammo = call compile tsp_cba_breach_ammo}] call CBA_fnc_addSetting;
-["tsp_cba_breach_ammo_multiplier", "SLIDER", ["Ammo Multiplier", "Effectiveness of non-breaching ammo multiplier."], ["TSP Breach", "Ballistic Breaching"], [0, 5, 1], true] call CBA_fnc_addSetting;
+["tsp_cba_breach_ammo_multiplier", "SLIDER", ["Ammo Multiplier", "Effectiveness of non-breaching ammo multiplier."], ["TSP Breach", "Ballistic Breaching"], [0, 10, 1], true] call CBA_fnc_addSetting;
 
 [
 	"tsp_cba_breach_walls", "EDITBOX",

@@ -180,10 +180,10 @@ tsp_fnc_breach_pick = {
 tsp_fnc_breach_gun = {
 	params ["_unit", "_ammo"];
 	(([cursorObject, "GEOM"] intersect [positionCameraToWorld [0,0,0], positionCameraToWorld [0,0,3]])#0) params ["_selection"]; if (isNil "_selection") exitWith {}; if !("door" in _selection) exitWith {};
-	_effectiveness = if (_ammo in tsp_cba_breach_ammo) then {1} else {(((getNumber (configFile >> "CfgAmmo" >> _ammo >> "hit")) min 50)/50)*tsp_cba_breach_ammo_multiplier};  //-- Cap at 50 and divide by 50 to get 0-1 value
+	_effectiveness = if (_ammo in tsp_cba_breach_ammo) then {1} else {(((getNumber (configFile >> "CfgAmmo" >> _ammo >> "hit")) min 50)/50)*tsp_cba_breach_ammo_multiplier};  //-- Cap at 50 and divide by 50 to get 0-1 value	
 	_data = [cursorObject, _selection] call tsp_fnc_breach_data; 
 	_data params ["_id", "_house", "_door", "_pos", "_animName", "_animPhase", "_locked", "_triggerName", "_triggerPos", "_handleName", "_handlePos", "_hingeName", "_hingePos"];
-	if (_locked != 3 || _animPhase == 0 && random 1 <= [cursorObject, [0,_effectiveness,_effectiveness/2,_effectiveness/10,0]] call tsp_fnc_breach_effectiveness) then {[_data, 0.2, 3] spawn tsp_fnc_breach_adjust};
+	if (_locked != 3 && _animPhase == 0 && random 1 <= [cursorObject, [0,_effectiveness,_effectiveness/2,_effectiveness/10,0]] call tsp_fnc_breach_effectiveness) then {[_data, 0.2, 3] spawn tsp_fnc_breach_adjust};
 };
 
 tsp_fnc_breach_melee = {

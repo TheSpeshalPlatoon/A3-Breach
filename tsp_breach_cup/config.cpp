@@ -1,6 +1,6 @@
 class CfgPatches {
 	class tsp_breach_cup {
-		requiredAddons[] = {"rhsusf_main", "ace_compat_cup_weapons_explosives"};
+		requiredAddons[] = {"CUP_Weapons_Ammunition", "ace_compat_cup_weapons_explosives"};
         skipWhenMissingDependencies = 1;
         weapons[] = {};
         units[] = {};

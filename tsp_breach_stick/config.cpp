@@ -60,7 +60,7 @@ class CfgGesturesMale {
 		class GestureNo;
 		class tsp_breach_stick_wnon_in: GestureNo {file = "tsp_breach_stick\anim\stick_in.rtm"; speed = 1.5; mask = "handsWeapon_pst"; showHandgun = false; interpolationSpeed = 3; leftHandIKCurve[] = {0,1,0.8,1,1,0}; rightHandIKCurve[] = {0,1,0.8,1,1,0};};
 		class tsp_breach_stick_wnon_loop: tsp_breach_stick_wnon_in {file = "tsp_breach_stick\anim\stick_loop.rtm"; speed = 0.5; looped = true; leftHandIKCurve[] = {0}; rightHandIKCurve[] = {0};};
-        class tsp_breach_stick_rifle_in: tsp_breach_stick_wnon_in {mask = "handsWeapon";};
+        class tsp_breach_stick_wrfl_in: tsp_breach_stick_wnon_in {mask = "handsWeapon"; leftHandIKCurve[] = {0}; rightHandIKCurve[] = {0};};
         class tsp_breach_stick_wrfl_loop: tsp_breach_stick_wnon_loop {mask = "handsWeapon";};
 	};
 	class BlendAnims {};

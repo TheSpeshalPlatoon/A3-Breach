@@ -1,4 +1,5 @@
 ["tsp_cba_breach", "CHECKBOX", ["Enable Breaching", "Enable/disable door/wall breaching."],	"TSP Breach", true, true] call CBA_fnc_addSetting;
+["tsp_cba_breach_stun", "CHECKBOX", ["Explosive Stun", "Explosives will stin enemies like a flashbang."], "TSP Breach", true, true] call CBA_fnc_addSetting;
 ["tsp_cba_breach_auto", "SLIDER", ["Auto Fuse Time", "Time to detonation for auto fuse"], ["TSP Breach", ""], [0, 15, 5], true] call CBA_fnc_addSetting;
 
 ["tsp_cba_breach_ace", "CHECKBOX", ["Enable ACE Interaction", "Enable/disable ACE interaction on doors."], ["TSP Breach", "Interaction"], true] call CBA_fnc_addSetting;

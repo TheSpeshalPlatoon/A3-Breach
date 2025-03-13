@@ -14,7 +14,10 @@ class Extended_PostInit_EventHandlers {class tsp_breach_shock_init {init = "['CB
 class CfgSounds {class tsp_breach_fuse {name = "tsp_breach_fuse"; sound[] = {"tsp_breach_shock\snd\fuse.ogg", 2, 2, 30}; titles[] = {0, ""};};};
 
 //-- ROPE 
-class CfgVehicles {class Rope; class shock_wire: Rope {model = "\tsp_breach_shock\wire.p3d"; segmentType = "shock_wire_segment";};};
+class CfgVehicles {
+    class Rope; class shock_wire: Rope {model = "\tsp_breach_shock\wire.p3d"; segmentType = "shock_wire_segment";};
+    class ace_fastroping_helper; class tsp_shock_helper: ace_fastroping_helper {model = "\tsp_breach_shock\helper.p3d";};
+};
 class CfgNonAIVehicles {class RopeSegment; class shock_wire_segment: RopeSegment {model = "\tsp_breach_shock\wire.p3d";};};
 
 //-- ITEMS

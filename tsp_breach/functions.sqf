@@ -106,7 +106,7 @@ tsp_fnc_breach_lock = {  //-- Lock random doors in radius
 };
 
 tsp_fnc_breach_explosive = {
-	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_floor", -1], ["_swing", 1], ["_push", 0.02]];
+	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_floor", -1], ["_swing", 1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
 	[getPosASL _charge, typeOf _charge, getText (configFile >> "CfgVehicles" >> (typeOf _charge) >> "ammo")] params ["_pos", "_class", "_ammoClass"];  //-- Save these cause we can't get em later
 	if (!local _charge || !tsp_cba_breach || _charge getVariable ["vis", false]) exitWith {};
 
@@ -162,6 +162,9 @@ tsp_fnc_breach_explosive = {
 			[_house, [_selection, 1]] remoteExec ["setHit", 0]; playSound3D [format ["A3\Sounds_F\arsenal\sfx\bullet_hits\glass_0%1.wss", (floor random 8) + 1], _selectionPos, false, AGLtoASL _selectionPos, 3, 1, 25];
 		} forEach _selections;
 	} forEach (nearestObjects [getPosASL _visual, ["BUILDING", "HOUSE", "CHURCH", "CHAPEL", "BUNKER", "FORTRESS", "VIEW-TOWER", "LIGHTHOUSE", "FUELSTATION", "HOSPITAL", "TOURISM"], 20]);
+
+	//-- Flash
+	if (tsp_cba_breach_stun && _damage#2 > 0.5) then {_visual setPosASL _end; [playa, _visual, false, false, tsp_cba_flashbang_distance*0.7, 1] call tsp_fnc_flashbang};
 
 	deleteVehicle _visual;
 };

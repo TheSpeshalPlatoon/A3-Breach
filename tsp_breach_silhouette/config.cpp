@@ -13,7 +13,7 @@ class CfgMagazines {
     class tsp_breach_silhouette_mag: SLAMDirectionalMine_Wire_Mag {
         displayName = "Silhouette Charge"; picture = "\tsp_breach_silhouette\gui\ui.paa"; descriptionShort = "Works on walls and doors.";
         model = "tsp_breach_silhouette\silhouette_mag.p3d"; ammo = "tsp_breach_silhouette_ammo"; mass = 80; ace_explosives_setupObject = "tsp_breach_silhouette_place";
-		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};
+		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
     };
 };
 
@@ -32,7 +32,7 @@ class CfgVehicles {
     class ACE_Explosives_Place_SLAM;
     class tsp_breach_silhouette_place: ACE_Explosives_Place_SLAM {
         ammo = "tsp_breach_silhouette_ammo"; model = "tsp_breach_silhouette\silhouette_ammo.p3d"; 
-        class EventHandlers {init = "[_this#0,-1,[1,1,1,1,1],0,1,0.25] spawn tsp_fnc_breach_explosive";};
+        class EventHandlers {init = "[_this#0,-1,[1,1,1,1,1],1,0,1,0.25] spawn tsp_fnc_breach_explosive";};
     };
 	class Items_base_F; 
     class tsp_breach_silhouette_twig: Items_base_F {scope = 2; displayName = "Twig"; model = "tsp_breach_silhouette\twig.p3d";};

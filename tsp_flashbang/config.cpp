@@ -50,6 +50,7 @@ class CfgMagazines {
         displayNameShort = "99-Bang";
     };
     class tsp_flashbang_m84: tsp_flashbang_fakels {
+		flashbang = "sleep 1.5; [_this#0, _this#1] spawn tsp_fnc_flashbang";
         displayname = "M84 Stun Grenade";
         descriptionShort = "The M84 is the currently-issued stun grenade of the United States Armed Forces.";
         displayNameShort = "M84";
@@ -57,23 +58,34 @@ class CfgMagazines {
         picture = "\tsp_flashbang\gui\m84.paa";
         ammo = "tsp_flashbang_m84_ammo";
     };
+    class tsp_flashbang_m84s: tsp_flashbang_fakels {
+		flashbang = "sleep 0.8; [_this#0, _this#1] spawn tsp_fnc_flashbang";
+        displayname = "M84 Stun Grenade (Short Fuse)";
+        descriptionShort = "Custom M84 with shorter fuse.";
+        displayNameShort = "M84S";
+        model = "tsp_flashbang\m84s.p3d";
+        picture = "\tsp_flashbang\gui\m84s.paa";
+        ammo = "tsp_flashbang_m84s_ammo";
+    };
 };
 class CfgAmmo {
     class SmokeShell;
     class tsp_flashbang_fakels_ammo: SmokeShell {model = "tsp_flashbang\fakel_s.p3d"; explosionTime = 2.3; timeToLive = 60; grenadeFireSound[] = {}; grenadeBurningSound[] = {}; aiAmmoUsageFlags = "64"; effectsSmoke = "";};
     class tsp_flashbang_cts_ammo: tsp_flashbang_fakels_ammo {model = "tsp_flashbang\cts.p3d";};
     class tsp_flashbang_m84_ammo: tsp_flashbang_fakels_ammo {model = "tsp_flashbang\m84.p3d";};
+    class tsp_flashbang_m84s_ammo: tsp_flashbang_fakels_ammo {model = "tsp_flashbang\m84s.p3d";};
 };
 class CfgWeapons {
     class GrenadeLauncher;
     class Throw: GrenadeLauncher {
-        muzzles[] += {"tsp_flashbang_fakelMuzzle","tsp_flashbang_ctsMuzzle","tsp_flashbang_cts2Muzzle","tsp_flashbang_cts99Muzzle", "tsp_flashbang_m84Muzzle"};
+        muzzles[] += {"tsp_flashbang_fakelMuzzle","tsp_flashbang_ctsMuzzle","tsp_flashbang_cts2Muzzle","tsp_flashbang_cts99Muzzle","tsp_flashbang_m84Muzzle","tsp_flashbang_m84sMuzzle"};
         class ThrowMuzzle;
         class tsp_flashbang_fakelMuzzle: ThrowMuzzle {magazines[] = {"tsp_flashbang_fakels"};};
         class tsp_flashbang_ctsMuzzle: ThrowMuzzle {magazines[] = {"tsp_flashbang_cts"};};
         class tsp_flashbang_cts2Muzzle: ThrowMuzzle {magazines[] = {"tsp_flashbang_cts2"};};
         class tsp_flashbang_cts99Muzzle: ThrowMuzzle {magazines[] = {"tsp_flashbang_cts99"};};
         class tsp_flashbang_m84Muzzle: ThrowMuzzle {magazines[] = {"tsp_flashbang_m84"};};
+        class tsp_flashbang_m84sMuzzle: ThrowMuzzle {magazines[] = {"tsp_flashbang_m84s"};};
     };
 };
 

@@ -28,8 +28,8 @@ class CfgAmmo {
 
 class CfgVehicles {
     class ACE_Explosives_Place_SLAM;
-    class tsp_breach_popper_place: ACE_Explosives_Place_SLAM {ammo = "tsp_breach_popper_ammo"; model = "tsp_breach_popper\popper_ammo.p3d"; class EventHandlers {init = "[_this#0,-1,[0.1,1,0.2,0,0],-1,0.25] spawn tsp_fnc_breach_explosive";};};
-    class tsp_breach_popper_auto_place: tsp_breach_popper_place {class EventHandlers {init = "[_this#0,tsp_cba_breach_auto,[0.1,1,0.2,0,0],-1,0.25] spawn tsp_fnc_breach_explosive";};};
+    class tsp_breach_popper_place: ACE_Explosives_Place_SLAM {ammo = "tsp_breach_popper_ammo"; model = "tsp_breach_popper\popper_ammo.p3d"; class EventHandlers {init = "[_this#0,-1,[0.1,1,0.2,0,0],0,-1,0.25] spawn tsp_fnc_breach_explosive";};};
+    class tsp_breach_popper_auto_place: tsp_breach_popper_place {class EventHandlers {init = "[_this#0,tsp_cba_breach_auto,[0.1,1,0.2,0,0],0,-1,0.25] spawn tsp_fnc_breach_explosive";};};
 };
 
 class CfgWeapons {

@@ -27,22 +27,26 @@ class CfgWeapons {
         displayName = "Shock Tube";
         picture = "\tsp_breach_shock\gui\ui.paa";
         model = "\tsp_breach_shock\shock.p3d";
-        ACE_Explosives_Range = 999;
+        ACE_Explosives_Range = 30;
         ACE_Explosives_triggerType = "Shock";
     };
 };
 
 class ACE_Triggers {
-    class Shock {
+    class Shock30 {
         displayName = "Shock Tube (30M)";
         isAttachable = 1;
         onPlace = "[_this#0, _this#1, _this#2, _this#3, _this#4, 30] spawn tsp_fnc_breach_shock_wire; _this call ace_explosives_fnc_AddClacker; false";
         picture = "\tsp_breach_shock\gui\ui.paa";
         requires[] = {"tsp_breach_shock"};
     };
-    class ShockShort: Shock {
+    class Shock15: Shock30 {
         displayName = "Shock Tube (15M)";
         onPlace = "[_this#0, _this#1, _this#2, _this#3, _this#4, 15] spawn tsp_fnc_breach_shock_wire; _this call ace_explosives_fnc_AddClacker; false";
+    };
+    class Shock5: Shock30 {
+        displayName = "Shock Tube (5M)";
+        onPlace = "[_this#0, _this#1, _this#2, _this#3, _this#4, 6] spawn tsp_fnc_breach_shock_wire; _this call ace_explosives_fnc_AddClacker; false";
     };
 };
 
@@ -51,10 +55,10 @@ class CfgMagazines {
 	class ATMine_Range_Mag;
     class SatchelCharge_Remote_Mag;
 	class DemoCharge_Remote_Mag; 
-    class ClaymoreDirectionalMine_Remote_Mag: CA_Magazine {class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};};
-    class DemoCharge_Remote_Mag: SatchelCharge_Remote_Mag {class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};};
-	class SatchelCharge_Remote_Mag: CA_Magazine	{class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};};
-	class SLAMDirectionalMine_Wire_Mag: ATMine_Range_Mag {class ACE_Triggers {SupportedTriggers[] = {"IRSensor", "PressurePlate", "Command", "Timer", "MK16_Transmitter", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};};
-	class IEDUrbanSmall_Remote_Mag: DemoCharge_Remote_Mag {class ACE_Triggers {SupportedTriggers[] = {"Cellphone", "PressurePlate", "Command", "DeadmanSwitch", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};};
-	class IEDUrbanBig_Remote_Mag: DemoCharge_Remote_Mag	{class ACE_Triggers {SupportedTriggers[] = {"Cellphone", "PressurePlate", "Command", "DeadmanSwitch", "Shock", "ShockShort"}; class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};};};
+    class ClaymoreDirectionalMine_Remote_Mag: CA_Magazine {class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};};
+    class DemoCharge_Remote_Mag: SatchelCharge_Remote_Mag {class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};};
+	class SatchelCharge_Remote_Mag: CA_Magazine	{class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};};
+	class SLAMDirectionalMine_Wire_Mag: ATMine_Range_Mag {class ACE_Triggers {SupportedTriggers[] = {"IRSensor", "PressurePlate", "Command", "Timer", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};};
+	class IEDUrbanSmall_Remote_Mag: DemoCharge_Remote_Mag {class ACE_Triggers {SupportedTriggers[] = {"Cellphone", "PressurePlate", "Command", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};};
+	class IEDUrbanBig_Remote_Mag: DemoCharge_Remote_Mag	{class ACE_Triggers {SupportedTriggers[] = {"Cellphone", "PressurePlate", "Command", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};};
 };

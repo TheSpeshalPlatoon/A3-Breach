@@ -11,8 +11,8 @@ class CfgMagazines {
 	class DemoCharge_Remote_Mag;
 	class rhs_charge_M2tet_x2_mag: DemoCharge_Remote_Mag {
 		class ACE_Triggers {
-			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock", "ShockShort"};
-			class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};
+			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};
+			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};
 };

@@ -85,11 +85,11 @@ tsp_fnc_breach_interact = {  //-- Add ACE actions
 			_params = "_data = (_this#0) getVariable 'data'; _data params ['_id','_house','_door','_pos','_animName','_animPhase','_locked','_triggerName','_triggerPos','_handleName','_handlePos','_hingeName','_hingePos'];";
 			[_helper, 0, ["door"], [_id, _name, _image, compile (_params + _code), compile (_params + _condition), {}, _helper, [0,0,0], 2.5] call ace_interact_menu_fnc_createAction] call ace_interact_menu_fnc_addActionToObject;
 		} forEach [
-			["Open","\tsp_breach\gui\open.paa",{[_data,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_tactical') then {[playa,'door'] call tsp_fnc_animate_tactical};},{_animPhase < 0.9 && _locked != 1}],
-			["Close","\tsp_breach\gui\close.paa",{[_data,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_tactical') then {[playa,'door'] call tsp_fnc_animate_tactical};},{_animPhase > 0.1 && _locked != 1}],
+			["Open","\tsp_breach\gui\open.paa",{[_data,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_animPhase < 0.9 && _locked != 1}],
+			["Close","\tsp_breach\gui\close.paa",{[_data,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_animPhase > 0.1 && _locked != 1}],
 			["Knock","\tsp_breach\gui\knock.paa",{playSound3D ["tsp_breach\snd\knock.ogg", _pos, false, _pos, 5, 1, 10]; [playa, "", "tsp_breach_knock", "tsp_common_stop", true, true, true] spawn tsp_fnc_gesture_play},{_animPhase == 0}],
-			["Unlock","\tsp_breach\gui\unlock.paa",{[_data,-1,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_tactical') then {[playa,'door'] call tsp_fnc_animate_tactical};},{_locked == 1 && _animPhase == 0 && (([eyePos playa, playa] call tsp_fnc_outsideness) < ([eyePos playa vectorAdd (vectorDir playa vectorMultiply 2), playa] call tsp_fnc_outsideness))}], 
-			["Lock","\tsp_breach\gui\lock.paa",{[_data,-1,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_tactical') then {[playa,'door'] call tsp_fnc_animate_tactical};},{_locked == 0 && _animPhase == 0}], 
+			["Unlock","\tsp_breach\gui\unlock.paa",{[_data,-1,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_locked == 1 && _animPhase == 0 && (([eyePos playa, playa] call tsp_fnc_outsideness) < ([eyePos playa vectorAdd (vectorDir playa vectorMultiply 2), playa] call tsp_fnc_outsideness))}], 
+			["Lock","\tsp_breach\gui\lock.paa",{[_data,-1,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_locked == 0 && _animPhase == 0}], 
 			["Use Paperclip","\tsp_breach\gui\paperclip.paa",{[playa,_data,0.75,"tsp_paperclip",tsp_cba_breach_paperclip] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_paperclip" in (items playa)}], 
 			["Use Lockpick","\tsp_breach\gui\lockpick.paa",{[playa,_data,0,"tsp_lockpick",tsp_cba_breach_lockpick] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_lockpick" in (items playa)}]
 		];
@@ -106,7 +106,7 @@ tsp_fnc_breach_lock = {  //-- Lock random doors in radius
 };
 
 tsp_fnc_breach_explosive = {
-	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_floor", -1], ["_swing", 1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
+	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_ragdoll", 0], ["_floor", -1], ["_swing", 1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
 	[getPosASL _charge, typeOf _charge, getText (configFile >> "CfgVehicles" >> (typeOf _charge) >> "ammo")] params ["_pos", "_class", "_ammoClass"];  //-- Save these cause we can't get em later
 	if (!local _charge || !tsp_cba_breach || _charge getVariable ["vis", false]) exitWith {};
 
@@ -116,7 +116,7 @@ tsp_fnc_breach_explosive = {
 	
 	//-- Position charge and handle auto fuse
 	_charge setPosASL (_intersectPos vectorAdd (vectorDir _charge vectorMultiply _push)); _charge enableSimulation false; _charge setVectorDir _normal; _dir = [vectorDir _charge, vectorUp _charge];
-	if (_floor != -1) then {_charge setPosASL (getPosASL _charge vectorAdd [0,0,-([_charge] call tsp_fnc_height) + _floor])};
+	if (_floor != -1) then {_charge setPosASL [(getPosASL _charge)#0,(getPosASL _charge)#1,(getPosASL playa)#2 + _floor]};
 	if (_fuse > -1) then {[_charge, getPosATL _charge, getDir _charge, getText (configFile >> "CfgAmmo" >> _ammoClass >> "defaultMagazine"), "Timer", [_fuse], _charge] call ace_explosives_fnc_placeExplosive};
 	
 	//-- Wait til armed
@@ -163,8 +163,18 @@ tsp_fnc_breach_explosive = {
 		} forEach _selections;
 	} forEach (nearestObjects [getPosASL _visual, ["BUILDING", "HOUSE", "CHURCH", "CHAPEL", "BUNKER", "FORTRESS", "VIEW-TOWER", "LIGHTHOUSE", "FUELSTATION", "HOSPITAL", "TOURISM"], 20]);
 
-	//-- Flash
-	if (tsp_cba_breach_stun && _damage#2 > 0.5) then {_visual setPosASL _end; [playa, _visual, false, false, tsp_cba_flashbang_distance*0.7, 1] call tsp_fnc_flashbang};
+	//-- Flash & Fly
+	_visual setPosASL _end;
+	if (tsp_cba_breach_stun && _damage#2 > 0.5) then {[playa, _visual, false, false, tsp_cba_flashbang_distance*0.7, 1] call tsp_fnc_flashbang};
+	if (tsp_cba_breach_ragdoll_force > 0) then {
+		_inside = allUnits select {[getPos _visual, getDir _visual - 180, 90, getPos _x] call BIS_fnc_inAngleSector && _x distance _visual < (tsp_cba_breach_ragdoll_distance*_ragdoll)};
+		_outside = allUnits select {[getPos _visual, getDir _visual, 90, getPos _x] call BIS_fnc_inAngleSector && _x distance _visual < ((tsp_cba_breach_ragdoll_distance*_ragdoll))};
+		{
+			_force = _ragdoll*(1 - ((_x distance _visual)/(tsp_cba_breach_ragdoll_distance*_ragdoll)))*tsp_cba_breach_ragdoll_force;
+			_vector = (getPosWorld _visual vectorFromTo getPosWorld _x) vectorMultiply (5000*_force); _vector set [2, _force*1000];
+			[_x, _vector, [random 1,0,0]] remoteExec ["tsp_fnc_breach_ragdoll", _x];
+		} forEach (_inside + _outside);
+	};
 
 	deleteVehicle _visual;
 };
@@ -198,4 +208,11 @@ tsp_fnc_breach_melee = {
 	if (_animPhase != 0 || _locked == 3) exitWith {playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40]};  //-- If door is open (0.01-1: open, 0: closed) or lock broken, we just want to swing it around
 	if (random 1 < [_house, _environmentDamage] call tsp_fnc_breach_effectiveness) exitWith {[_data, if (_push) then {1} else {0.15}, 3] spawn tsp_fnc_breach_adjust};
 	playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40];
+};
+
+tsp_fnc_breach_ragdoll = {
+	params ["_unit", ["_force", [1000,1000,1000]], ["_torque", [1000,1000,1000]], ["_sleep", 0.1]]; 
+	(vehicle _unit) addForce [_force, _torque, false]; 
+	waitUntil {sleep _sleep; selectMax (velocity _unit apply {abs _x}) < 0.1}; 
+	_unit setUnconscious false;
 };

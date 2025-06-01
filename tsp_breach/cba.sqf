@@ -1,20 +1,23 @@
 ["tsp_cba_breach", "CHECKBOX", ["Enable Breaching", "Enable/disable door/wall breaching."],	"TSP Breach", true, true] call CBA_fnc_addSetting;
-["tsp_cba_breach_stun", "CHECKBOX", ["Explosive Stun", "Explosives will stin enemies like a flashbang."], "TSP Breach", true, true] call CBA_fnc_addSetting;
-["tsp_cba_breach_auto", "SLIDER", ["Auto Fuse Time", "Time to detonation for auto fuse"], ["TSP Breach", ""], [0, 15, 5], true] call CBA_fnc_addSetting;
+
+["tsp_cba_breach_stun", "CHECKBOX", ["Explosive Stun", "Explosives will stun enemies like a flashbang."], ["TSP Breach", "Explosives"], true, true] call CBA_fnc_addSetting;
+["tsp_cba_breach_ragdoll_force", "SLIDER", ["Explosive Ragdoll Force", "Force to send people flying."], ["TSP Breach", "Explosives"], [0, 10, 1], true] call CBA_fnc_addSetting;
+["tsp_cba_breach_ragdoll_distance", "SLIDER", ["Explosive Ragdoll Distance", "Distance from explosive to send people flying."], ["TSP Breach", "Explosives"], [0, 10, 5], true] call CBA_fnc_addSetting;
+["tsp_cba_breach_auto", "SLIDER", ["Auto Fuse Time", "Time to detonation for auto fuse"], ["TSP Breach", "Explosives"], [0, 15, 5], true] call CBA_fnc_addSetting;
 
 ["tsp_cba_breach_ace", "CHECKBOX", ["Enable ACE Interaction", "Enable/disable ACE interaction on doors."], ["TSP Breach", "Interaction"], true] call CBA_fnc_addSetting;
 ["tsp_cba_breach_vanilla", "CHECKBOX", ["Disable Vanilla Interaction", "Enable/disable vanilla scroll wheel interaction on doors."], ["TSP Breach", "Interaction"], false] call CBA_fnc_addSetting;
 ["tsp_cba_breach_break", "CHECKBOX", ["Break Locks", "Enable/disable lock breaking on breach."], ["TSP Breach", "Interaction"], true] call CBA_fnc_addSetting;
 
-["tsp_cba_breach_lock_house", "SLIDER", ["Lock Chance (House)", "Chance house will be selected to be locked."], ["TSP Breach", "Auto Locking"], [0, 1, 0.25], true] call CBA_fnc_addSetting;
-["tsp_cba_breach_lock_door", "SLIDER", ["Lock Chance (Door)", "Chance door will be selected to be locked."], ["TSP Breach", "Auto Locking"], [0, 1, 0.75], true] call CBA_fnc_addSetting;
+["tsp_cba_breach_lock_house", "SLIDER", ["Lock Chance (House)", "Chance house will be selected to be locked."], ["TSP Breach", "Auto Locking"], [0, 1, 0.2], true] call CBA_fnc_addSetting;
+["tsp_cba_breach_lock_door", "SLIDER", ["Lock Chance (Door)", "Chance door will be selected to be locked."], ["TSP Breach", "Auto Locking"], [0, 1, 0.2], true] call CBA_fnc_addSetting;
 ["tsp_cba_breach_lock_blacklist", "EDITBOX", ["Lock Blacklist", "Array of houses that should not be locked randomly. Use this setVariable ['breach_blacklist',true] for specific buildings."], ["TSP Breach", "Auto Locking"], '[]', true, {tsp_cba_breach_lock_blacklist = call compile tsp_cba_breach_lock_blacklist}] call CBA_fnc_addSetting;
 
 ["tsp_cba_breach_paperclip", "EDITBOX", ["Paperclip Chances", "Chances of picking doors. [Glass, Civil, Military, Reinforced]"], ["TSP Breach", "Lock Picking"], '[0,0.5,0.25,0.15]', true, {tsp_cba_breach_paperclip = call compile tsp_cba_breach_paperclip}] call CBA_fnc_addSetting;
 ["tsp_cba_breach_lockpick", "EDITBOX", ["Lockpick Chances", "Chances of picking doors. [Glass, Civil, Military, Reinforced]"], ["TSP Breach", "Lock Picking"], '[0,0.75,0.5,0.05]', true, {tsp_cba_breach_lockpick = call compile tsp_cba_breach_lockpick}] call CBA_fnc_addSetting;
 ["tsp_cba_breach_picking_time", "SLIDER", ["Picking Duration", "Duration of picking doors. There is some randomness."], ["TSP Breach", "Lock Picking"], [0, 120, 20], true] call CBA_fnc_addSetting;
 
-["tsp_cba_breach_ammo", "EDITBOX", ["Breaching Ammo", "Array containing ammo that should be effective at opening doors, like shotgun shells."],	["TSP Breach", "Ballistic Breaching"], '[
+["tsp_cba_breach_ammo", "EDITBOX", ["Breaching Ammo", "Array containing ammo that should be effective at opening doors, like shotgun shells."],	["TSP Breach", "Ballistic"], '[
 	"B_12Gauge_Slug_NoCartridge","B_12Gauge_Pellets_Submunition",
 	"rhs_ammo_12g_slug","rhs_ammo_12g_00buckshot","rhs_ammo_m576_buckshot",
 	"UK3CB_BAF_B_12Gauge_Slug","UK3CB_BAF_B_12Gauge_Pellets",
@@ -22,7 +25,7 @@
 	"CUP_12Gauge_Pellets_Submunition_No0_Buck","CUP_12Gauge_Pellets_Submunition_No00_Buck",
 	"ACE_12Gauge_Pellets_Submunition_No0_Buck","HLC_12G_Buck"
 ]', true, {tsp_cba_breach_ammo = call compile tsp_cba_breach_ammo}] call CBA_fnc_addSetting;
-["tsp_cba_breach_ammo_multiplier", "SLIDER", ["Ammo Multiplier", "Effectiveness of non-breaching ammo multiplier."], ["TSP Breach", "Ballistic Breaching"], [0, 10, 1], true] call CBA_fnc_addSetting;
+["tsp_cba_breach_ammo_multiplier", "SLIDER", ["Ammo Multiplier", "Effectiveness of non-breaching ammo multiplier."], ["TSP Breach", "Ballistic"], [0, 10, 1], true] call CBA_fnc_addSetting;
 
 [
 	"tsp_cba_breach_walls", "EDITBOX",

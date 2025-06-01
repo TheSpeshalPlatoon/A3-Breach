@@ -12,14 +12,14 @@ class CfgMagazines {
 	class rhssaf_mine_mrud_a_mag;
 	class rhssaf_tm100_mag: CA_Magazine	{
 		class ACE_Triggers {
-			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock", "ShockShort"};
-			class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};
+			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};
+			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};
 	class rhssaf_mine_mrud_d_mag: rhssaf_mine_mrud_a_mag {
 		class ACE_Triggers {
-			SupportedTriggers[] = {"Command", "MK16_Transmitter", "Shock", "ShockShort"};
-			class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};
+			SupportedTriggers[] = {"Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};
+			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};
 };

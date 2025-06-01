@@ -11,8 +11,8 @@ class CfgMagazines {
 	class CA_Magazine;
 	class rhsusf_m112_mag: CA_Magazine {
 		class ACE_Triggers {
-			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock", "ShockShort"};
-			class Shock {FuseTime = 2;}; class ShockShort {FuseTime = 1;};
+			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};
+			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};
 };

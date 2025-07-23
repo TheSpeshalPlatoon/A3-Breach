@@ -16,7 +16,7 @@ tsp_fnc_breach_shock_wire = {
 };
 
 tsp_fnc_breach_shock_wave = {
-	params ["_unit", "_explosive", "_magazine", "_fuzeTime", "_triggerItem", ["_helpers", attachedObjects (_this#0) select {typeOf _x == "tsp_shock_helper"}]];
+	params ["_unit", "_number", "_explosive", "_magazine", "_fuzeTime", "_triggerItem", ["_helpers", attachedObjects (_this#0) select {typeOf _x == "tsp_shock_helper"}]];
 	if (count _helpers == 0) exitWith {}; _rope = (_helpers#0) getVariable "rope";
 	_source = "Land_HelipadEmpty_F" createVehicle [0,0,0]; 
 	_source say3D "tsp_breach_fuse";
@@ -35,6 +35,7 @@ tsp_fnc_breach_shock_wave = {
 		sleep 0.01;
 	} forEach ropeSegments _rope;
 	sleep 0.1; deleteVehicle _source;
+	sleep tsp_cba_breach_fuse; _explosive setDamage 1;
 };
 
 waitUntil {sleep 5; !(isNull (findDisplay 46))};  //-- Idk why this is needed but it is

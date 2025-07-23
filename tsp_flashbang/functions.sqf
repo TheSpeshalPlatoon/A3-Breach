@@ -26,7 +26,7 @@ tsp_fnc_flashbang_player = {  //-- Screen effects
 	if (_unit getVariable ["flashed", false]) exitWith {}; _unit setVariable ["flashed", true];	
 	_blur = ppEffectCreate ["DynamicBlur", 600]; _blur ppEffectEnable true; _blur ppEffectAdjust [50*_amount]; _blur ppEffectCommit 0.1;
 	if (_volume == 1) then {0.1 fadeSound (1-_amount); sleep 0.1; (5*_amount) fadeSound _volume};
-	_blur ppEffectAdjust [0]; _blur ppEffectCommit (8*_amount);
+	sleep 0.1; _blur ppEffectAdjust [0]; _blur ppEffectCommit (8*_amount);
 	_unit setVariable ["flashed", false];
 };
 

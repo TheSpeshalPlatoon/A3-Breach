@@ -90,8 +90,8 @@ tsp_fnc_breach_interact = {  //-- Add ACE actions
 			["Knock","\tsp_breach\gui\knock.paa",{playSound3D ["tsp_breach\snd\knock.ogg", _pos, false, _pos, 5, 1, 10]; [playa, "", "tsp_breach_knock", "tsp_common_stop", true, true, true] spawn tsp_fnc_gesture_play},{_animPhase == 0}],
 			["Unlock","\tsp_breach\gui\unlock.paa",{[_data,-1,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_locked == 1 && _animPhase == 0 && (([eyePos playa, playa] call tsp_fnc_outsideness) < ([eyePos playa vectorAdd (vectorDir playa vectorMultiply 2), playa] call tsp_fnc_outsideness))}], 
 			["Lock","\tsp_breach\gui\lock.paa",{[_data,-1,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_locked == 0 && _animPhase == 0}], 
-			["Use Paperclip","\tsp_breach\gui\paperclip.paa",{[playa,_data,0.75,"tsp_paperclip",tsp_cba_breach_paperclip] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_paperclip" in (items playa)}], 
-			["Use Lockpick","\tsp_breach\gui\lockpick.paa",{[playa,_data,0,"tsp_lockpick",tsp_cba_breach_lockpick] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_lockpick" in (items playa)}]
+			["Use Paperclip","\tsp_breach\gui\paperclip.paa",{[playa,_data,0.75,"tsp_paperclip",tsp_cba_breach_paperclip] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_paperclip" in (items playa) && !(_house getVariable ["breach_blacklist_pick", false])}], 
+			["Use Lockpick","\tsp_breach\gui\lockpick.paa",{[playa,_data,0,"tsp_lockpick",tsp_cba_breach_lockpick] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_lockpick" in (items playa) && !(_house getVariable ["breach_blacklist_pick", false])}]
 		];
 	} forEach ([getPosASL _unit] call tsp_fnc_breach_doors);
 };
@@ -100,7 +100,7 @@ tsp_fnc_breach_lock = {  //-- Lock random doors in radius
 	params [["_pos", [0,0,0]], ["_radius", 999999], ["_houseChance", tsp_cba_breach_lock_house], ["_doorChance", tsp_cba_breach_lock_door], ["_lock", 1], ["_types", ["BUILDING", "HOUSE", "CHURCH", "CHAPEL", "BUNKER", "FORTRESS", "VIEW-TOWER", "LIGHTHOUSE", "FUELSTATION", "HOSPITAL", "TOURISM"]]];
 	{  //-- For all buildings in radius
 		if !(random 1 < _houseChance) then {continue};  //--  Skip
-		if (_x getVariable ["breach_blacklist", false] || (typeOf _x) in tsp_cba_breach_lock_blacklist) then {continue};  //--  Skip
+		if (_x getVariable ["breach_blacklist_lock", false] || (typeOf _x) in tsp_cba_breach_lock_blacklist) then {continue};  //--  Skip
 		for "_i" from 0 to (count (configfile >> "CfgVehicles" >> typeOf _x >> "UserActions")) do {if (random 1 <= _doorChance) then {_x setVariable [format ["bis_disabled_Door_%1", _i], _lock, true]}};
 	} forEach (nearestTerrainObjects [_pos, _types, _radius] + nearestObjects [_pos, _types, _radius]);
 };
@@ -133,7 +133,7 @@ tsp_fnc_breach_explosive = {
 	[_visual, true] remoteExec ["hideObjectGlobal", 2];  //-- Cause we might sleep below before deleting _visual
 
 	{  //-- Doors
-		_x params ["_house", "_class", "_name", "_pos"];
+		_x params ["_house", "_class", "_name", "_pos"]; if (_house getVariable ["breach_blacklist_explosive", false]) then {continue};
 		if (random 1 <= [_house, _damage] call tsp_fnc_breach_effectiveness) then {[[_house, _name] call tsp_fnc_breach_data, _swing, 3] spawn tsp_fnc_breach_adjust};
 	} forEach ([getPosASL _visual, 2] call tsp_fnc_breach_doors);
 
@@ -153,15 +153,7 @@ tsp_fnc_breach_explosive = {
 		};
 	};
 
-	{  //-- Glass
-		if (getAllHitPointsDamage _x isEqualTo []) then {continue};
-		[_x, (getAllHitPointsDamage _x)#1, (getAllHitPointsDamage _x)#2] params ["_house", "_selections", "_damage"];
-		{  //-- For all selections
-			[_x, _house modelToWorld (_house selectionPosition _x)] params ["_selection", "_selectionPos"];
-			if (_selectionPos distance _pos > 7 || _damage#_forEachIndex == 1 || !("glass" in _selection || "window" in _selection)) then {continue};  //-- Skip
-			[_house, [_selection, 1]] remoteExec ["setHit", 0]; playSound3D [format ["A3\Sounds_F\arsenal\sfx\bullet_hits\glass_0%1.wss", (floor random 8) + 1], _selectionPos, false, AGLtoASL _selectionPos, 3, 1, 25];
-		} forEach _selections;
-	} forEach (nearestObjects [getPosASL _visual, ["BUILDING", "HOUSE", "CHURCH", "CHAPEL", "BUNKER", "FORTRESS", "VIEW-TOWER", "LIGHTHOUSE", "FUELSTATION", "HOSPITAL", "TOURISM"], 20]);
+	[_visual, 7] call tsp_fnc_glass;  //-- Glass
 
 	//-- Flash & Fly
 	_visual setPosASL _end;
@@ -196,6 +188,7 @@ tsp_fnc_breach_gun = {
 	_effectiveness = if (_ammo in tsp_cba_breach_ammo) then {1} else {(((getNumber (configFile >> "CfgAmmo" >> _ammo >> "hit")) min 50)/50)*tsp_cba_breach_ammo_multiplier};  //-- Cap at 50 and divide by 50 to get 0-1 value	
 	_data = [cursorObject, _selection] call tsp_fnc_breach_data; 
 	_data params ["_id", "_house", "_door", "_pos", "_animName", "_animPhase", "_locked", "_triggerName", "_triggerPos", "_handleName", "_handlePos", "_hingeName", "_hingePos"];
+	if (_house getVariable ["breach_blacklist_gun", false]) exitWith {};
 	if (_locked != 3 && _animPhase == 0 && random 1 <= [cursorObject, [0,_effectiveness,_effectiveness/2,_effectiveness/10,0]] call tsp_fnc_breach_effectiveness) then {[_data, 0.2, 3] spawn tsp_fnc_breach_adjust};
 };
 
@@ -206,6 +199,7 @@ tsp_fnc_breach_melee = {
 	_push = [_unit, _data] call tsp_fnc_breach_push;
 	if (_animPhase != 0 || _locked == 3) then {[_data, if (_push) then {1} else {0}] spawn tsp_fnc_breach_adjust};
 	if (_animPhase != 0 || _locked == 3) exitWith {playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40]};  //-- If door is open (0.01-1: open, 0: closed) or lock broken, we just want to swing it around
+	if (_house getVariable ["breach_blacklist_melee", false]) exitWith {};
 	if (random 1 < [_house, _environmentDamage] call tsp_fnc_breach_effectiveness) exitWith {[_data, if (_push) then {1} else {0.15}, 3] spawn tsp_fnc_breach_adjust};
 	playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40];
 };

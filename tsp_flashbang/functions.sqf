@@ -10,13 +10,13 @@ tsp_fnc_flashbang = {
 	} forEach (allUnits select {(_x distance _flash < _distance/10) || (_x distance _flash < _distance && [_flash, "VIEW"] checkVisibility [eyePos _x, eyePos _flash] > 0)});
 };
 
-tsp_fnc_flashbang_effects = {  //-- Particle effects, global
+tsp_fnc_flashbang_effects = {  //-- Particle effects, should be run global
 	params ["_flash", ["_smokeFX", true], ["_sparksFX", true], ["_fireFX", true], ["_lightFX", true]];
 	_smoke = "#particleSource" createVehicleLocal [0,0,0]; if (tsp_cba_flashbang_smoke && _smokeFX) then {_smoke attachto [_flash, [0,0,0]]}; _smoke setParticleClass "ScudSmoke2";  //-- Smoke
 	_sparks = "#particleSource" createVehicleLocal [0,0,0];	if (tsp_cba_flashbang_sparks && _sparksFX) then {_sparks attachto [_flash, [0,0,0]]}; _sparks setParticleClass "FireSparksSmall";    //-- Sparks    
 	_fire = "#particleSource" createVehicleLocal [0,0,0]; if (tsp_cba_flashbang_fire && _fireFX) then {_fire attachto [_flash, [0,0,0]]}; _fire setParticleClass "ScudFire";                    //-- Fire   	
 	_light = "#lightpoint" createVehicleLocal (getPos _flash); _light setLightColor [1,0.8,0.5]; _light setLightAmbient [1,0.8,0.5];
-	_light setLightUseFlare true; _light setLightFlareSize tsp_cba_flashbang_brightness; _light setLightFlareMaxDistance tsp_cba_flashbang_brightness;
+	_light setLightUseFlare true; _light setLightFlareSize tsp_cba_flashbang_brightness; _light setLightFlareMaxDistance tsp_cba_flashbang_brightness*10;
 	if (_lightFX) then {_light setLightBrightness tsp_cba_flashbang_brightness; _light setLightDayLight true};
 	sleep 0.1; deleteVehicle _sparks; sleep 0.1; deleteVehicle _fire; deleteVehicle _light; sleep 0.1; deleteVehicle _smoke;
 };

@@ -62,12 +62,13 @@ tsp_fnc_breach_effectiveness = {  //-- Select effectiveness based on house type
 tsp_fnc_breach_adjust = {  //-- Manipulate doors
 	params ["_data", ["_amount", -1], ["_lock", -1]];  //-- "_amount" can be -1 (nothing), 0 - 1 (closed - open) // "_lock" can be -1 (nothing), 0 (unlocked), 1 (locked), 3 (break)
 	_data params ["_id", "_house", "_door", "_pos", "_animName", "_animPhase", "_locked", "_triggerName", "_triggerPos", "_handleName", "_handlePos", "_hingeName", "_hingePos"];
+	if (_house getVariable [("unbreachable_" + _id), false]) exitWith {};
 	if (_amount != -1) then {{_house animate [_animName regexReplace [_x#0, _x#1], _amount]} forEach [["a_rot","b_rot"],["b_rot","a_rot"],["a_rot","_rot"],["b_rot","_rot"]]};  //-- Double doors
 	if (_amount != -1) then {{_house animateSource [(_animName + _x), _amount]} forEach ["_noSound_source", "_sound_source"]};  //-- Sahara
-	if (_lock == 0) then {_house setVariable [("bis_disabled_Door_" + _id), 0, true]; playSound3D ["tsp_breach\snd\unlock.ogg", _pos, false, _pos, 4, 1, 50]};  //-- Unlock	
-	if (_lock == 1) then {_house setVariable [("bis_disabled_Door_" + _id), 1, true]; playSound3D ["tsp_breach\snd\lock.ogg", _pos, false, _pos, 4, 1, 50]};   //-- Lock
+	if (_lock == 0) then {_house setVariable [("bis_disabled_Door_" + _id), 0, true]; playSound3D ["tsp_breach\snd\unlock.ogg", objNull, false, _pos, 4, 1, 50]};  //-- Unlock	
+	if (_lock == 1) then {_house setVariable [("bis_disabled_Door_" + _id), 1, true]; playSound3D ["tsp_breach\snd\lock.ogg", objNull, false, _pos, 4, 1, 50]};   //-- Lock
 	if (_lock == 3 && _locked != 3) then {_house setVariable [("bis_disabled_Door_" + _id), if (tsp_cba_breach_break) then {3} else {0}, true]};  //-- Break and not broken
-	if (_lock == 3 && _locked != 3) then {playSound3D ["tsp_breach\snd\destroy.ogg", _pos, false, _pos, 1, 1, 50]};  //-- Break and not broken
+	if (_lock == 3 && _locked != 3) then {playSound3D ["tsp_breach\snd\destroy.ogg", objNull, false, _pos, 1, 1, 50]};  //-- Break and not broken
 	if (_lock == 3) then {_smoke = "#particlesource" createVehicle ASLtoATL _handlePos; _smoke setParticleClass "ImpactSmoke"; _smoke setDropInterval 0.1; sleep 0.2; deleteVehicle _smoke};  //-- Break
 };
 
@@ -87,7 +88,7 @@ tsp_fnc_breach_interact = {  //-- Add ACE actions
 		} forEach [
 			["Open","\tsp_breach\gui\open.paa",{[_data,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_animPhase < 0.9 && _locked != 1}],
 			["Close","\tsp_breach\gui\close.paa",{[_data,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_animPhase > 0.1 && _locked != 1}],
-			["Knock","\tsp_breach\gui\knock.paa",{playSound3D ["tsp_breach\snd\knock.ogg", _pos, false, _pos, 5, 1, 10]; [playa, "", "tsp_breach_knock", "tsp_common_stop", true, true, true] spawn tsp_fnc_gesture_play},{_animPhase == 0}],
+			["Knock","\tsp_breach\gui\knock.paa",{playSound3D ["tsp_breach\snd\knock.ogg", objNull, false, _pos, 5, 1, 10]; [playa, "", "tsp_breach_knock", "tsp_common_stop", true, true, true] spawn tsp_fnc_gesture_play},{_animPhase == 0}],
 			["Unlock","\tsp_breach\gui\unlock.paa",{[_data,-1,0] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_locked == 1 && _animPhase == 0 && (([eyePos playa, playa] call tsp_fnc_outsideness) < ([eyePos playa vectorAdd (vectorDir playa vectorMultiply 2), playa] call tsp_fnc_outsideness))}], 
 			["Lock","\tsp_breach\gui\lock.paa",{[_data,-1,1] call tsp_fnc_breach_adjust; if !(isNil 'tsp_fnc_animate_door') then {[playa] call tsp_fnc_animate_door};},{_locked == 0 && _animPhase == 0}], 
 			["Use Paperclip","\tsp_breach\gui\paperclip.paa",{[playa,_data,0.75,"tsp_paperclip",tsp_cba_breach_paperclip] spawn tsp_fnc_breach_pick},{_locked == 1 && _animPhase == 0 && "tsp_paperclip" in (items playa) && !(_house getVariable ["breach_blacklist_pick", false])}], 
@@ -111,7 +112,7 @@ tsp_fnc_breach_explosive = {
 	if (!local _charge || !tsp_cba_breach || _charge getVariable ["vis", false]) exitWith {};
 
 	//-- Iffy sticky instersecty uh
-	[_pos vectorAdd ([vectorDir _charge, 0, 2] call BIS_fnc_rotateVector3D vectorMultiply 0.7), _pos vectorAdd ([vectorDir _charge, 0, 2] call BIS_fnc_rotateVector3D vectorMultiply -0.7)] params ["_start", "_end"];
+	[_pos vectorAdd ([vectorDir _charge, 0, 2] call BIS_fnc_rotateVector3D vectorMultiply 1), _pos vectorAdd ([vectorDir _charge, 0, 2] call BIS_fnc_rotateVector3D vectorMultiply -0.7)] params ["_start", "_end"];
 	((lineIntersectsSurfaces [_start, _end, _charge, player, true, 1, "GEOM"])#0) params ["_intersectPos", "_normal", "_object"]; if (isNil "_object") exitWith {};  //-- If no house/wall found
 	
 	//-- Position charge and handle auto fuse
@@ -198,10 +199,10 @@ tsp_fnc_breach_melee = {
 	_data = [cursorObject, _selection] call tsp_fnc_breach_data; _data params ["_id","_house","_door","_pos","_animName","_animPhase","_locked","_triggerName","_triggerPos","_handleName","_handlePos","_hingeName","_hingePos"];
 	_push = [_unit, _data] call tsp_fnc_breach_push;
 	if (_animPhase != 0 || _locked == 3) then {[_data, if (_push) then {1} else {0}] spawn tsp_fnc_breach_adjust};
-	if (_animPhase != 0 || _locked == 3) exitWith {playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40]};  //-- If door is open (0.01-1: open, 0: closed) or lock broken, we just want to swing it around
+	if (_animPhase != 0 || _locked == 3) exitWith {playSound3D ["tsp_breach\snd\fail.ogg", objNull, false, _pos, 2, 1, 40]};  //-- If door is open (0.01-1: open, 0: closed) or lock broken, we just want to swing it around
 	if (_house getVariable ["breach_blacklist_melee", false]) exitWith {};
 	if (random 1 < [_house, _environmentDamage] call tsp_fnc_breach_effectiveness) exitWith {[_data, if (_push) then {1} else {0.15}, 3] spawn tsp_fnc_breach_adjust};
-	playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40];
+	playSound3D ["tsp_breach\snd\fail.ogg", objNull, false, _pos, 2, 1, 40];
 };
 
 tsp_fnc_breach_ragdoll = {

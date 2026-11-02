@@ -22,4 +22,13 @@ class CfgMagazines {
 			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};
+
+	class HandGrenade;
+	class rhs_mag_plamyam: HandGrenade {displayNameShort = "Plamya-M"; ammo = "rhs_ammo_plamyam"; flashbang = "sleep 2; [_this#0, _this#1] spawn tsp_fnc_flashbang";}; 
+	class rhs_mag_zarya2: HandGrenade {displayNameShort = "Zarya-2"; ammo = "rhs_ammo_zarya2"; flashbang = "sleep 2; [_this#0, _this#1] spawn tsp_fnc_flashbang";}; 
+};
+class CfgAmmo {
+    class SmokeShell;
+    class rhs_ammo_plamyam: SmokeShell {model = "\rhsafrf\addons\rhs_weapons\grenades\throw\acc_plamyaM"; explosionTime = 2.3; timeToLive = 60; grenadeFireSound[] = {}; grenadeBurningSound[] = {}; aiAmmoUsageFlags = "64"; effectsSmoke = "";};
+    class rhs_ammo_zarya2: rhs_ammo_plamyam {model = "\rhsafrf\addons\rhs_weapons\grenades\throw\acc_zarya";};
 };

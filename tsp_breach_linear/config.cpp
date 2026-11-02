@@ -9,7 +9,7 @@ class CfgMagazines {
     class SLAMDirectionalMine_Wire_Mag;
     class tsp_breach_linear_mag: SLAMDirectionalMine_Wire_Mag {
         displayName = "Linear Charge"; picture = "\tsp_breach_linear\gui\ui.paa"; descriptionShort = "Linear style breaching charge, used for regular/military/reinforced doors.";
-        model = "tsp_breach_linear\linear_mag.p3d"; ammo = "tsp_breach_linear_ammo"; mass = 5; ace_explosives_setupObject = "tsp_breach_linear_place";
+        scope = 2; scopeArsenal = 2; model = "tsp_breach_linear\linear_mag.p3d"; ammo = "tsp_breach_linear_ammo"; mass = 5; ace_explosives_setupObject = "tsp_breach_linear_place";
 		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
     };
     class tsp_breach_linear_auto_mag: tsp_breach_linear_mag {displayName = "Linear Charge (Auto-Fuse)"; ace_explosives_setupObject = "tsp_breach_linear_auto_place"; class ACE_Triggers {SupportedTriggers[] = {};};};

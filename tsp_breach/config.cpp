@@ -21,23 +21,23 @@ class CfgWeapons {
 		displayName = "Paperclip";
 		picture = "\tsp_breach\gui\paperclip.paa";
 		model = "tsp_breach\paperclip.p3d";
-		class ItemInfo: CBA_MiscItem_ItemInfo {mass = 1; type = 302;};
+		class ItemInfo: CBA_MiscItem_ItemInfo {mass = 0.1; type = 302;};
     };
 	class tsp_lockpick: tsp_paperclip {
 		displayName = "Lock Pick Kit";
 		picture = "\tsp_breach\gui\lockpick.paa";
 		model = "tsp_breach\lockpick.p3d";
-		class ItemInfo: ItemInfo {mass = 10;};
+		class ItemInfo: ItemInfo {mass = 1;};
     };
 };
 
 //-- SOUNDS
 class CfgSoundShaders {
     class GrenadeHe_closeExp_SoundShader;
-    class tsp_breach_exp: GrenadeHe_closeExp_SoundShader {samples[] = {{"\tsp_breach\snd\exp1.ogg",1},{"\tsp_breach\snd\exp2.ogg",1}}; volume = 10;};
-    class tsp_breach_exp_small: GrenadeHe_closeExp_SoundShader {samples[] = {{"\tsp_breach\snd\exp_small.ogg",1}}; volume = 5;};
-    class tsp_breach_exp_triple: GrenadeHe_closeExp_SoundShader {samples[] = {{"\tsp_breach\snd\exp_triple.ogg",1}}; volume = 8;};
-    class tsp_breach_exp_claymore: GrenadeHe_closeExp_SoundShader {samples[] = {{"\A3\Sounds_F\arsenal\explosives\mines\Explosion_claymore",1}}; volume = 10;};
+    class tsp_breach_exp: GrenadeHe_closeExp_SoundShader {samples[] = {{"\tsp_breach\snd\exp1.ogg",1},{"\tsp_breach\snd\exp2.ogg",1}}; volume = 6;};
+    class tsp_breach_exp_small: GrenadeHe_closeExp_SoundShader {samples[] = {{"\tsp_breach\snd\exp_small.ogg",1}}; volume = 2;};
+    class tsp_breach_exp_triple: GrenadeHe_closeExp_SoundShader {samples[] = {{"\tsp_breach\snd\exp_triple.ogg",1}}; volume = 6;};
+    class tsp_breach_exp_claymore: GrenadeHe_closeExp_SoundShader {samples[] = {{"\A3\Sounds_F\arsenal\explosives\mines\Explosion_claymore",1}}; volume = 8;};
 };
 class CfgSoundSets {
     class GrenadeHe_Exp_SoundSet;

@@ -11,7 +11,7 @@ class CfgMagazines {
         displayName = "Packaged Charge"; picture = "\tsp_breach_package\gui\ui.paa"; descriptionShort = "package style breaching charge, used for walls and reinforced doors. Has a high potential to be lethal.";  //ACTUAL DESC
         model = "tsp_breach_package\package_mag.p3d"; ammo = "tsp_breach_package_ammo"; mass = 20; ace_explosives_setupObject = "tsp_breach_package_place"; ace_explosives_isSticky = 1;		
         scope = 2; scopeArsenal = 2; model = "tsp_breach_package\package_mag.p3d"; ammo = "tsp_breach_package_ammo"; mass = 20; ace_explosives_setupObject = "tsp_breach_package_place";
-		    class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
+		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
     };
 };
 

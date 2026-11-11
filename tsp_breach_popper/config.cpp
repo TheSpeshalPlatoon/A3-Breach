@@ -9,9 +9,9 @@ class CfgMagazines {
     class SLAMDirectionalMine_Wire_Mag;
     class tsp_breach_popper_mag: SLAMDirectionalMine_Wire_Mag {
         displayName = "Lock Popper"; picture = "\tsp_breach_popper\gui\ui.paa"; descriptionShort = "Small charge used for regular/military doors.";
-        model = "tsp_breach_popper\popper_mag.p3d"; ammo = "tsp_breach_popper_ammo"; mass = 10; ace_explosives_setupObject = "tsp_breach_popper_place";
-		ace_explosives_isSticky = 1;
-		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter"};};
+        model = "tsp_breach_popper\popper_mag.p3d"; ammo = "tsp_breach_popper_ammo"; mass = 10; ace_explosives_setupObject = "tsp_breach_popper_place"; ace_explosives_isSticky = 1;
+        scope = 2; scopeArsenal = 2; model = "tsp_breach_popper\popper_mag.p3d"; ammo = "tsp_breach_popper_ammo"; mass = 10; ace_explosives_setupObject = "tsp_breach_popper_place";
+		    class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter"};};
     };
     class tsp_breach_popper_auto_mag: tsp_breach_popper_mag {displayName = "Lock Popper (Auto-Fuse)"; ace_explosives_setupObject = "tsp_breach_popper_auto_place"; class ACE_Triggers {SupportedTriggers[] = {};};};
 };

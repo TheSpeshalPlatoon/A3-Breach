@@ -22,4 +22,10 @@ class CfgMagazines {
 			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};
+	class HandGrenade;
+	class rhssaf_mag_rshb_p98: HandGrenade {displayNameShort = "RShB P98"; ammo = "rhssaf_ammo_rshb_p98"; flashbang = "sleep 1.5; [_this#0, _this#1] spawn tsp_fnc_flashbang";}; 
+};
+class CfgAmmo {
+    class SmokeShell;
+    class rhssaf_ammo_rshb_p98: SmokeShell {model = "\rhssaf\addons\rhssaf_m_explosives\grenades\thrown\rshb_p98\rhssaf_rshb_p98_throw"; explosionTime = 2.3; timeToLive = 60; grenadeFireSound[] = {}; grenadeBurningSound[] = {}; aiAmmoUsageFlags = "64"; effectsSmoke = "";};
 };

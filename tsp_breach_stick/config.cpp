@@ -12,9 +12,9 @@ class CfgMagazines {
     class SLAMDirectionalMine_Wire_Mag;
     class tsp_breach_stick_mag: SLAMDirectionalMine_Wire_Mag {
         displayName = "Stick Charge"; picture = "\tsp_breach_stick\gui\ui.paa"; descriptionShort = "Large breaching charge intended for doors, used for regular/military/reinforced doors.";
-        model = "tsp_breach_stick\stick_mag.p3d"; ammo = "tsp_breach_stick_ammo"; mass = 10; ace_explosives_setupObject = "tsp_breach_stick_place";
-		ace_explosives_isSticky = 1;
-		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
+        model = "tsp_breach_stick\stick_mag.p3d"; ammo = "tsp_breach_stick_ammo"; mass = 10; ace_explosives_setupObject = "tsp_breach_stick_place";	ace_explosives_isSticky = 1;
+        scope = 2; scopeArsenal = 2; model = "tsp_breach_stick\stick_mag.p3d"; ammo = "tsp_breach_stick_ammo"; mass = 10; ace_explosives_setupObject = "tsp_breach_stick_place";
+		    class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
     };
 };
 

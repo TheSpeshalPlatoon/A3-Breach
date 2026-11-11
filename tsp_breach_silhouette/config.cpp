@@ -12,7 +12,7 @@ class CfgMagazines {
     class SLAMDirectionalMine_Wire_Mag;
     class tsp_breach_silhouette_mag: SLAMDirectionalMine_Wire_Mag {
         displayName = "Silhouette Charge"; picture = "\tsp_breach_silhouette\gui\ui.paa"; descriptionShort = "Works on walls and doors.";
-        model = "tsp_breach_silhouette\silhouette_mag.p3d"; ammo = "tsp_breach_silhouette_ammo"; mass = 80; ace_explosives_setupObject = "tsp_breach_silhouette_place";
+        scope = 2; scopeArsenal = 2; model = "tsp_breach_silhouette\silhouette_mag.p3d"; ammo = "tsp_breach_silhouette_ammo"; mass = 80; ace_explosives_setupObject = "tsp_breach_silhouette_place";
 		class ACE_Triggers {SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "Shock30", "Shock15", "Shock5"};class Shock30 {FuseTime = 3;}; class Shock15 {FuseTime = 3;}; class Shock5 {FuseTime = 3;};};
     };
 };

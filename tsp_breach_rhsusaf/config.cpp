@@ -12,6 +12,7 @@ class CfgMagazines {
 	class rhsusf_m112_mag: CA_Magazine {
 		class ACE_Triggers {
 			SupportedTriggers[] = {"Timer", "Command", "MK16_Transmitter", "DeadmanSwitch", "Shock30", "Shock15", "Shock5"};
+			ace_explosives_isSticky = 1;
 			class Shock {FuseTime = 3;}; class ShockShort {FuseTime = 1;};
 		};
 	};

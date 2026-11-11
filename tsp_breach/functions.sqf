@@ -107,31 +107,44 @@ tsp_fnc_breach_lock = {  //-- Lock random doors in radius
 };
 
 tsp_fnc_breach_explosive = {
-	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_ragdoll", 0], ["_floor", -1], ["_swing", 1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
+	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_ragdoll", 0], ["_swing", 1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
 	[getPosASL _charge, typeOf _charge, getText (configFile >> "CfgVehicles" >> (typeOf _charge) >> "ammo")] params ["_pos", "_class", "_ammoClass"];  //-- Save these cause we can't get em later
-	if (!local _charge || !tsp_cba_breach || _charge getVariable ["vis", false]) exitWith {};
 
-	//-- Iffy sticky instersecty uh
-	[_pos vectorAdd ([vectorDir _charge, 0, 2] call BIS_fnc_rotateVector3D vectorMultiply 1), _pos vectorAdd ([vectorDir _charge, 0, 2] call BIS_fnc_rotateVector3D vectorMultiply -0.7)] params ["_start", "_end"];
-	((lineIntersectsSurfaces [_start, _end, _charge, player, true, 1, "GEOM"])#0) params ["_intersectPos", "_normal", "_object"]; if (isNil "_object") exitWith {};  //-- If no house/wall found
-	
-	//-- Position charge and handle auto fuse
-	_charge setPosASL (_intersectPos vectorAdd (vectorDir _charge vectorMultiply _push)); _charge enableSimulation false; _charge setVectorDir _normal; _dir = [vectorDir _charge, vectorUp _charge];
-	if (_floor != -1) then {_charge setPosASL [(getPosASL _charge)#0,(getPosASL _charge)#1,(getPosASL playa)#2 + _floor]};
-	if (_fuse > -1) then {[_charge, getPosATL _charge, getDir _charge, getText (configFile >> "CfgAmmo" >> _ammoClass >> "defaultMagazine"), "Timer", [_fuse], _charge] call ace_explosives_fnc_placeExplosive};
-	
-	//-- Wait til armed
+	if (!local _charge || !tsp_cba_breach || _charge getVariable ["vis", false]) exitWith {};  //-- Dont do all this for visual model or it'll be infinite loop
+
+	_charge enableSimulation false; detach _charge;  //-- We dont want ACE's attachment system, we're taking over from here
+
+	//-- Get the surface normal so we can positon the charge relative to surface
+	[eyePos playa, eyePos playa vectorAdd (eyeDirection playa vectorMultiply 2)] params ["_start", "_end"];
+	((lineIntersectsSurfaces [_start, _end, _charge, player, true, 1, "GEOM"])#0) params ["_intersectPos", "_normal", "_object"]; 
+	if (isNil "_object") exitWith {_charge enableSimulation true};  //-- If no house/wall found
+	//my_intersectPos = _intersectPos; my_normal = _normal; onEachFrame {drawLine3D [ASLtoAGL my_intersectPos, ASLtoAGL (my_intersectPos vectorAdd (my_normal vectorMultiply -5)), [1,0,0,1],100]};
+	//_helper1 = "Sign_Arrow_F" createVehicleLocal [0,0,0]; _helper1 setPosASL _start; _helper1 spawn {sleep 5; deleteVehicle _this};
+	//_helper2 = "Sign_Arrow_Blue_F" createVehicleLocal [0,0,0]; _helper2 setPosASL _end; _helper2 spawn {sleep 5; deleteVehicle _this};
+	_charge setPosASL (_intersectPos vectorAdd (_normal vectorMultiply _push));  //-- Put your thing down
+	_normal = _normal vectorMultiply -1;                                        //-- Flip it
+	_dir = ([0,0,1] vectorCrossProduct _normal) vectorCrossProduct _normal;    //-- And reverse it
+	_charge setVectorDirAndUp [_dir, _normal vectorMultiply -1];
+
+	//-- Create new dummy charge since it's easier to work with than ammo
 	_visual = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"]; _visual setVariable ["vis", true]; 
-	[_visual, _visual] call ace_common_fnc_claim; _visual enableSimulation false; _visual attachTo [_charge, [0,0,0]];  //-- Removes ACE actions
-	while {sleep 0.01; _charge isNotEqualTo objNull} do {if (count (lineIntersectsSurfaces [_start, _end, _charge, player, true, 1, "GEOM"]) < 1) then {_charge enableSimulation true}};
-	
-	//-- Handle ammo
-	_ammo = (allMissionObjects _ammoClass) select {_x distance2D _pos < 2}; if (count _ammo == 0) exitWith {deleteVehicle _visual}; _ammo = _ammo#0; 
-	[_ammo, true] remoteExec ["hideObjectGlobal", 2];
+	_visual enableSimulation false; _visual attachTo [_charge, [0,0,0]];
+	[_visual, _visual] call ace_common_fnc_claim;   //-- Removes ACE actions
 
-	//-- Wait til explosion
+	//-- If auto fuse, arm it, else wait til armed (_charge will be deleted when armed and replace with _ammo)
+	if (_fuse > -1) then {[_charge, getPosATL _charge, getDir _charge, getText (configFile >> "CfgAmmo" >> _ammoClass >> "defaultMagazine"), "Timer", [_fuse], _charge] call ace_explosives_fnc_placeExplosive};
+	while {sleep 0.1; _charge isNotEqualTo objNull} do {if (count (lineIntersectsSurfaces [_start, _end, _charge, player, true, 1, "GEOM"]) < 1) then {_charge enableSimulation true}};  //-- Drop it
+
+	//-- Handle _ammo sitch
+	_ammo = (allMissionObjects _ammoClass) select {_x distance2D _pos < 2}; 
+	if (count _ammo == 0) exitWith {deleteVehicle _visual};  //-- Player picked charge back up, just leave and clean up
+	_ammo = _ammo#0; [_ammo, true] remoteExec ["hideObjectGlobal", 2];  //-- Ammo can disappear cause it wont be in right spot anyway
+
+	//-- Wait til explosion (_ammo will be deleted)
 	while {sleep 0.1; _ammo isNotEqualTo objNull} do {if (count (lineIntersectsSurfaces [_start, _end, _ammo, _visual, true, 1, "GEOM"]) < 1) then {_visual enableSimulation true; _ammo attachTo [_visual]}};
-	[_visual, true] remoteExec ["hideObjectGlobal", 2];  //-- Cause we might sleep below before deleting _visual
+	[_visual, true] remoteExec ["hideObjectGlobal", 2];  //-- Don't delete yet, just hide cause we do stuff with _visual below first
+
+	[_visual, 7] call tsp_fnc_glass;  //-- Glass
 
 	{  //-- Doors
 		_x params ["_house", "_class", "_name", "_pos"]; if (_house getVariable ["breach_blacklist_explosive", false]) then {continue};
@@ -154,8 +167,6 @@ tsp_fnc_breach_explosive = {
 		};
 	};
 
-	[_visual, 7] call tsp_fnc_glass;  //-- Glass
-
 	//-- Flash & Fly
 	_visual setPosASL _end;
 	if (tsp_cba_breach_stun && _damage#2 > 0.5) then {[playa, _visual, false, false, tsp_cba_flashbang_distance*0.7, 1] call tsp_fnc_flashbang};
@@ -169,7 +180,7 @@ tsp_fnc_breach_explosive = {
 		} forEach (_inside + _outside);
 	};
 
-	deleteVehicle _visual;
+	deleteVehicle _visual;  //-- Goodbye old friend
 };
 
 tsp_fnc_breach_pick = {

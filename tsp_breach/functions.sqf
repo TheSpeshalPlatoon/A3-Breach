@@ -121,7 +121,7 @@ tsp_fnc_breach_explosive = {
 	//my_intersectPos = _intersectPos; my_normal = _normal; onEachFrame {drawLine3D [ASLtoAGL my_intersectPos, ASLtoAGL (my_intersectPos vectorAdd (my_normal vectorMultiply -5)), [1,0,0,1],100]};
 	//_helper1 = "Sign_Arrow_F" createVehicleLocal [0,0,0]; _helper1 setPosASL _start; _helper1 spawn {sleep 5; deleteVehicle _this};
 	//_helper2 = "Sign_Arrow_Blue_F" createVehicleLocal [0,0,0]; _helper2 setPosASL _end; _helper2 spawn {sleep 5; deleteVehicle _this};
-	_charge setPosASL (_intersectPos vectorAdd (_normal vectorMultiply _push));  //-- Put your thing down
+	_charge setPosASL ((_intersectPos vectorAdd (_normal vectorMultiply _push)) vectorAdd [0, 0, -0.3]);  //-- Put your thing down
 	_normal = _normal vectorMultiply -1;                                        //-- Flip it
 	_dir = ([0,0,1] vectorCrossProduct _normal) vectorCrossProduct _normal;    //-- And reverse it
 	_charge setVectorDirAndUp [_dir, _normal vectorMultiply -1];

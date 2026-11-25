@@ -79,7 +79,7 @@ tsp_fnc_breach_interact = {  //-- Add ACE actions
 		([_house, _name] call tsp_fnc_breach_data) params ["_id","_house","_door","_pos","_animName","_animPhase","_locked","_triggerName","_triggerPos","_handleName","_handlePos","_hingeName","_hingePos"];
 		_helper = "ACE_LogicDummy" createVehicleLocal [0,0,0]; tsp_breach_allActionsHelpers pushBack _helper;  //-- Create helper object, ace_marker_flags_red // ACE_LogicDummy // Sign_Arrow_F
 		_helper setPosASL (if (_handlePos distance _actionPos < 1) then {_handlePos} else {_actionPos});
-		[_helper, 0, [], ["door", "Door", "", {true}, {true}, {}, [], {[0,0,0]}, 2.5] call ace_interact_menu_fnc_createAction] call ace_interact_menu_fnc_addActionToObject;  //-- Add main action to "_helper"
+		[_helper, 0, [], ["door", "Door", "", {true}, {true}, {}, [], {[0,0,0]}, 2, [false,false,false,false,true]] call ace_interact_menu_fnc_createAction] call ace_interact_menu_fnc_addActionToObject;  //-- Add main action to "_helper"
 		_helper setVariable ["data", [_house, _name] call tsp_fnc_breach_data];
 		{
 			_x params ["_name", "_image", "_code", "_condition"]; [(str _code) trim ["{}",0], (str _condition) trim ["{}", 0]] params ["_code", "_condition"];
@@ -107,7 +107,7 @@ tsp_fnc_breach_lock = {  //-- Lock random doors in radius
 };
 
 tsp_fnc_breach_explosive = {
-	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_ragdoll", 0], ["_swing", 1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
+	params ["_charge", ["_fuse", -1], ["_damage", [1,1,1,0.2,0]], ["_ragdoll", 0], ["_swing", 1], ["_floor", -1], ["_push", 0.02]];  //["_glass", "_civil", "_military", "_reinforced", "_wall"];
 	[getPosASL _charge, typeOf _charge, getText (configFile >> "CfgVehicles" >> (typeOf _charge) >> "ammo")] params ["_pos", "_class", "_ammoClass"];  //-- Save these cause we can't get em later
 
 	if (!local _charge || !tsp_cba_breach || _charge getVariable ["vis", false]) exitWith {};  //-- Dont do all this for visual model or it'll be infinite loop
@@ -115,16 +115,16 @@ tsp_fnc_breach_explosive = {
 	_charge enableSimulation false; detach _charge;  //-- We dont want ACE's attachment system, we're taking over from here
 
 	//-- Get the surface normal so we can positon the charge relative to surface
-	[eyePos playa, eyePos playa vectorAdd (eyeDirection playa vectorMultiply 2)] params ["_start", "_end"];
+	[eyePos playa, (eyePos playa) vectorAdd ((getCameraViewDirection playa) vectorMultiply 2)] params ["_start", "_end"];
 	((lineIntersectsSurfaces [_start, _end, _charge, player, true, 1, "GEOM"])#0) params ["_intersectPos", "_normal", "_object"]; 
 	if (isNil "_object") exitWith {_charge enableSimulation true};  //-- If no house/wall found
-	//my_intersectPos = _intersectPos; my_normal = _normal; onEachFrame {drawLine3D [ASLtoAGL my_intersectPos, ASLtoAGL (my_intersectPos vectorAdd (my_normal vectorMultiply -5)), [1,0,0,1],100]};
 	//_helper1 = "Sign_Arrow_F" createVehicleLocal [0,0,0]; _helper1 setPosASL _start; _helper1 spawn {sleep 5; deleteVehicle _this};
 	//_helper2 = "Sign_Arrow_Blue_F" createVehicleLocal [0,0,0]; _helper2 setPosASL _end; _helper2 spawn {sleep 5; deleteVehicle _this};
-	_charge setPosASL ((_intersectPos vectorAdd (_normal vectorMultiply _push)) vectorAdd [0, 0, -0.3]);  //-- Put your thing down
-	_normal = _normal vectorMultiply -1;                                        //-- Flip it
-	_dir = ([0,0,1] vectorCrossProduct _normal) vectorCrossProduct _normal;    //-- And reverse it
-	_charge setVectorDirAndUp [_dir, _normal vectorMultiply -1];
+
+	_charge setPosASL ((_intersectPos vectorAdd (_normal vectorMultiply _push)));  //-- Put your thing down
+	_charge setVectorDir _normal;                                                 //-- Flip it
+	if (_floor == -1) then {_charge setVectorDirAndUp [vectorUp _charge vectorMultiply -1, vectorDir _charge]};  //-- And reverse it
+	if (_floor != -1) then {_charge setPosASL [(getPosASL _charge)#0,(getPosASL _charge)#1,(getPosASL playa)#2 + _floor]};
 
 	//-- Create new dummy charge since it's easier to work with than ammo
 	_visual = createVehicle [_class, [0,0,0], [], 0, "CAN_COLLIDE"]; _visual setVariable ["vis", true]; 

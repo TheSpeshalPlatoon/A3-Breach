@@ -1,9 +1,9 @@
 tsp_fnc_breach_shock_wire = {
 	params ["_unit", "_explosive", "_magazine", "_fuzeTime", "_triggerItem", "_length"];
 	if (!isNil "tsp_fnc_animate_clacker") then {[_unit, "", "tsp_animate_shock_loop_wnon", "\tsp_breach_shock\shock.p3d", "leftHand", [0.02,0,0], [0,0,-100], {!("shock" in gestureState playa)}, false] spawn tsp_fnc_gesture_item};
-	_helper_ammo = "tsp_shock_helper" createVehicle [0,0,0]; _helper_ammo enableSimulation false; _helper_ammo allowDamage false; 
+	_helper_ammo = "tsp_shock_helper" createVehicle (position _unit); _helper_ammo enableSimulation false; _helper_ammo allowDamage false; 
 	if ("attach" in (_explosive selectionNames "MEMORY")) then {_helper_ammo attachTo [_explosive, [0,0,0], "attach"]} else {_helper_ammo attachTo [_explosive, [0,0,0]]}; detach _helper_ammo;
-	_helper_unit = "tsp_shock_helper" createVehicle [0,0,0]; _helper_unit allowDamage false; _helper_unit setPos (getPos _unit);
+	_helper_unit = "tsp_shock_helper" createVehicle (position _unit); _helper_unit allowDamage false; _helper_unit setPos (getPos _unit);
 	_helper_unit setVariable ["rope", ropeCreate [_helper_unit, [0,0,0], _helper_ammo, [0,0,0], _length, ["", [0,0,-1]], ["", [0,0,-1]], "shock_wire"], true];
 	while {sleep 0.1; alive _unit && _explosive isNotEqualTo objNull} do {
 		if ("shock_out" in gestureState _unit) exitWith {detach _helper_unit};
